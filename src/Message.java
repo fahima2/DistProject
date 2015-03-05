@@ -98,6 +98,7 @@ class UnRegResult extends Message {
 /**
  * 
  * @author Thamayanthy
+ * @author Fahima
  * @param file_name
  */
 
@@ -156,10 +157,9 @@ class QueryMessage extends Message {
 
 class QueryResponseMessage extends Message {
 
-	public String file_name;
-	int num_files;
-	String[] files;
-	int hops;
+	public int no_file = 0;
+	public String[] files;
+	public int hops = 0;
 
 	/*
 	 * length SEROK no_files IP port hops filename1 filename2 ... ...
@@ -179,13 +179,15 @@ class QueryResponseMessage extends Message {
 		type = MsgType.MSG_SEARCHOK;
 
 		String[] tokens = msg.split(" ");
-		num_files=Integer.parseInt(tokens[0]);
+		no_file=Integer.parseInt(tokens[0]);
+		if(no_file>=1){
 		ip_from = tokens[1];
-		port_from = Integer.parseInt(tokens[2]);
+		port_from =Integer.parseInt(tokens[2]);
+		hops =Integer.parseInt(tokens[3]);
 		
-		files=new String[num_files];
-		for(int i=0;i<num_files;i++){
-			files[i]=tokens[i+3];
+		for(int i=4;i<tokens.length;i++){
+			files[i-4]=tokens[i];
+		}	
 		}
 	}
 
